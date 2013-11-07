@@ -2,6 +2,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{enumerate}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
 %\usepackage{amsmath}
 %\usepackage{listings}
 %\usepackage{tabularx}
@@ -10,6 +13,9 @@
 %\usepackage{fancyvrb}
 %\DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small}
 %\DefineVerbatimEnvironment{example}{Verbatim}{fontsize=\small}
+
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
 
 \author{Carl Eriksson & Viktor Mattsson}
 \begin{document}
@@ -55,8 +61,8 @@
     \section{Introduction}
         \input{introduction.tex}
 
-    %\section{Tillvägagångsätt}
-    %    \input{utforande.tex}
+    \section{Algorithms}
+        \input{algorithms.tex}
 
     %\section{Predikatlista}
     %    \input{predlist.tex}

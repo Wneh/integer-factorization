@@ -1,0 +1,60 @@
+\subsection{Used}
+
+\subsubsection{Trial division}
+
+Trial division is one of the most inefficient algorithms for factorization of large integers. It is however one of the most efficient algorithms for factoring small integers and it also the easiest algorithm to perceive.
+The trial division algorithm only have a few steps. It begins with finding a set of prime-numbers using some algorithm such as the sieve of eratosthenes then iteratively check if \(N\) divided by any of these primes grants no remainder. If it does not grant any remainder the prime used in the division is a factor. The algorithm will continue checking this until \(N\) becomes one.
+A simple optimization of trial division is to never check primes greater than the square root of \(N\). Considering that if \(N = a * b\) and if a is greater than \(\sqrt{N}\) then \(b\) must be smaller than \(\sqrt{N}\). So for every factor greater than \(\sqrt{N}\) there has to be one factor smaller than \(\sqrt{N}\) thus if we check for factors up to \(\sqrt{N}\) we will find a factor unless \(N\) is already prime.
+
+
+\paragraph{Pseudocode:}
+
+\begin{algorithm}
+\caption{Trial division}
+\begin{algorithmic}
+\Function {trail\_division}{$N$}
+	\If{$N = 1$}
+	 	\State \Return
+	\EndIf
+	\State $list\_of\_primes = sieve\_of\_eratosthenes(\sqrt{N})$
+	\State prime\_factors = $\{\}$
+	\ForAll{$prime$ in $primes$} 
+		\While{ $n \bmod prime = 0$}
+			\State $prime\_factors.add(prime)$
+			\State $n = n / p$
+		\EndWhile
+	\EndFor
+	\If {$n$ not equal to $1$}
+		\State \Return $prime\_factors.add(n)$
+	\EndIf
+	\State \Return $prime\_factors$
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+% \begin{algorithm}
+% \caption{Calculate $y = x^n$}
+% \begin{algorithmic} 
+% \REQUIRE $n \geq 0 \vee x \neq 0$
+% \ENSURE $y = x^n$
+% \STATE $y \leftarrow 1$
+% \IF{$n < 0$}
+% \STATE $X \leftarrow 1 / x$
+% \STATE $N \leftarrow -n$
+% \ELSE
+% \STATE $X \leftarrow x$
+% \STATE $N \leftarrow n$
+% \ENDIF
+% \WHILE{$N \neq 0$}
+% \IF{$N$ is even}
+% \STATE $X \leftarrow X \times X$
+% \STATE $N \leftarrow N / 2$
+% \ELSE[$N$ is odd]
+% \STATE $y \leftarrow y \times X$
+% \STATE $N \leftarrow N - 1$
+% \ENDIF
+% \ENDWHILE
+% \end{algorithmic}
+% \end{algorithm}
+
+\subsection{Considered}
