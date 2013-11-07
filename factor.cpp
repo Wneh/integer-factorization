@@ -13,7 +13,7 @@ int primetest = 25;
 unsigned int numBrents = 100000;
 // long totalBrents = 500000;
 gmp_randstate_t r_state;
-int timeToRun = 15;
+int timeToRun = 14;
 time_t startTime;
 time_t endTime;
 int pollardLimit = 50;
@@ -202,7 +202,7 @@ mpz_class pollard_brent(mpz_class& n){
                     gcd(g, q, n);
                     k = k + m;
                     if(k > numBrents){
-                        //totalBrents -= k;
+                        //total Brents -= k;
                         return 1;
                     }
                 }
