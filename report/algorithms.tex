@@ -93,7 +93,7 @@ As two pointers move at different speeds, one will move much further ahead than 
 \EndFunction
 \Function{f}{$N$}
 	\State \Return $(N*N + c) \% N$
-\EndFunction{}
+\EndFunction
 \end{algorithmic}
 \end{algorithm}
 
@@ -115,3 +115,31 @@ Since we used the primary test in gmp that uses Miller-Rabin primary test(after 
 
 \subsection{Considered}
 
+\subsubsection{Quadratic sieve}
+
+We considered to implement the quadratic sieve but due to the hardness of the implementation and the lack of good describing pseudo code we decided not to implement it.
+
+\subsubsection{Fermat factorization}
+
+The key concept of fermat factorization is that prime can be written in the form $N = x^2 - y^2$ which itself can be rewritten into $N = (x+y)(x-y)$. Thus search for an x that satisfy $x^2 - N = y^2$ equation. Then a non trivial prime factor is found.   
+
+After reading up on the algorithm and its performance we decided not to put time on implement it.
+
+\paragraph{Pseudocode:}
+
+\textcolor{white}{ }
+
+\begin{algorithm}[H]
+\caption{Fermat factorization}
+\begin{algorithmic}
+\Function {fermat}{$N$}
+	\State $a = ciel(\sqrt{N})$
+	\State $b2 = a*a - N$
+	\While {$b2$ is not square}
+		\State $a = a + 1$
+		\State $b2 = a*a - N$
+	\EndWhile	
+	\State \Return $a - \sqrt{b2}$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
