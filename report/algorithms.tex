@@ -147,13 +147,43 @@ Brent’s cycle finding algorithm is uses the same structure as Floyd’s algori
 \end{algorithmic}
 \end{algorithm}
 
+\subsubsection{Pollard’s P-1}
+
+Pollard’s P-1 uses Fermat’s little theorem to find factors. Fermat’s little theorem state that if $i^p = i$ mod $p$ where $p$ is a prime number, $p$ is a factor of $i$. While this is slightly inconvenient for finding factors this theorem can be divided by $i$ to create a more useful version. If $i^{(p-1)} = 1$ mod $p$, then $i^{(p-1)} - 1$ is a factor of $i$.
+Using this idea Pollard’s P-1 try to find the GCD between a coprime constant and a prime from a pre calculated set of primes within the modulo number space of $N$ in hope to find a factor.
+
+\paragraph{Pseudocode:}
+
+\textcolor{white}{ }
+
+\begin{algorithm}[H]
+\caption{Pollard p-1}
+\begin{algorithmic}
+\Function {pollard\_p-1}{$N$}
+	\State $c = 2$
+	\ForAll{$prime$ in list of $primes$}
+		\State$p = prime$
+		\While{$p < $ last prime in list of primes}
+			\State $c = c^{prime}\%N$
+			\State $p = p * prime$
+		\EndWhile
+	\EndFor
+	\State $g = gcd(c-1,N)$
+	\If{$1 < g < n$}
+		\State \Return $g$
+	\Else
+		\State \Return $fail$
+	\EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
 \subsubsection{Miller-Rabin primary test}
 
 Miller-Rabin primary test is a monte carlo algorithm with the time complexity of $\mathcal{O}(k*log(n)^2)$. The
 probability for the primary test is $2^{-k}$ where k is the number of iterations.
 
-Since we used the primary test in gmp that uses Miller-Rabin primary test(after trial-division) we won’t present any pseudocode for this algorithm. 
-
+Since we used the primary test in gmp that uses Miller-Rabin primary test(after trial-division) we won’t present any pseudocode for this algorithm.
 
 \subsection{Considered}
 
@@ -175,7 +205,7 @@ After reading up on the algorithm and its performance we decided not to put time
 \caption{Fermat factorization}
 \begin{algorithmic}
 \Function {fermat}{$N$}
-	\State $a = ciel(\sqrt{N})$
+	\State $a = \ceil{\sqrt{N}}$
 	\State $b2 = a*a - N$
 	\While {$b2$ is not square}
 		\State $a = a + 1$
