@@ -66,6 +66,36 @@ If the function \(f\) in this program would return numbers such as the sequence
 it would result in an endless loop where the program keep running in cycles. The solution to this is to use two pointers which move at different speeds. This is commonly referred as a tortoise and hare algorithm. 
 As two pointers move at different speeds, one will move much further ahead than the other at a certain time. However, if there is a cycle both of them will sooner or later get stuck in it and therefore you could easily check if a cycle exists by checking if the two pointers is located at the same spot.
 
+\paragraph{Pseudocode:}
+
+\textcolor{white}{ }
+
+\begin{algorithm}
+\caption{Pollard rho}
+\begin{algorithmic}
+\Function {pollard}{$N$}
+	\If{$N$ mod $2 = 0$}
+	 	\State \Return $2$
+	\EndIf
+	\State $x = random()$
+	\State $c = random()$
+	\State $y = c$
+	\State $g = 1$
+	\While{$g = 1$} 
+		\State $x = f(x)$
+		\State $y = f(f(y)$
+		\State $g = gcd(x-y,N)$
+	\EndWhile
+	\If {$g = N$}
+		\State \Return $error$
+	\EndIf
+	\State \Return $g$
+\EndFunction
+\Function{f}{$N$}
+	\State \Return $(N*N + c) \% N$
+\EndFunction{}
+\end{algorithmic}
+\end{algorithm}
 
 
 
