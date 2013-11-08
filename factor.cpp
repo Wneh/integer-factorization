@@ -3,179 +3,162 @@
 #include <vector>
 #include <time.h>
 
-//g++ --std=c++0x main.cpp -lgmpxx -lgmp -o factoring.out
+/* Compile with:
+ * g++ --std=c++0x factor.cpp -lgmpxx -lgmp
+ */
+
 
 using namespace std;
 
 vector<mpz_class> smallPrimes;
 vector<mpz_class> factors;
+vector<mpz_class> primes;
 int primetest = 25;
-unsigned int numBrents = 100000;
-// long totalBrents = 500000;
+unsigned int numBrents = 110000;
 gmp_randstate_t r_state;
-int timeToRun = 14;
+int timeToRun = 15;
 time_t startTime;
 time_t endTime;
 int pollardLimit = 50;
 const mpz_class ONE(1);
 
-
+/* Gain next random for Pollard's rho. */
 mpz_class fnuc(const mpz_class& y,const mpz_class& c,const mpz_class& mod){
     return (y*y+c)%mod;
 }
 
+/* Get GCD for y and z */
 void gcd(mpz_class& x, mpz_class& y, mpz_class& z){
     mpz_gcd(x.get_mpz_t(),y.get_mpz_t(),z.get_mpz_t());
 }
 
+/* Milley-Rabin prime test */
 bool isPrime(mpz_class& x){
     return mpz_probab_prime_p(x.get_mpz_t(),primetest);
 }
 
+/* Get random value between 0 and sqrt(n) */
 void random(mpz_class& x, mpz_class& n){
-    //mpz_class temp;
-    //mpz_sqrt(temp.get_mpz_t(),n.get_mpz_t());
-    mpz_urandomm(x.get_mpz_t(),r_state,n.get_mpz_t());
+    mpz_class temp;
+    mpz_sqrt(temp.get_mpz_t(),n.get_mpz_t());
+    mpz_urandomm(x.get_mpz_t(),r_state,temp.get_mpz_t());
 }
 
-/*mpz_class& min(mpz_class& x, mpz_class& y){
+/* Min between two mpz_class. */
+mpz_class& min(mpz_class& x, mpz_class& y){
     return (x < y ? x : y);
-}*/
+}
 
+/* Abs of two mpz_class. */
 void abs1(mpz_class& ret, mpz_class& x){
     mpz_abs(ret.get_mpz_t(),x.get_mpz_t());
 }
 
-mpz_class pollard_rho(mpz_class& n){
-
-    //for(int i = 0 ; i < smallPrimes.size() ; ++i){
-        mpz_class x = 2;
-        mpz_class y = 2;
-        mpz_class c = 1;
-        mpz_class d = 1;
-        mpz_class temp;
-        int i = 0;
-        while(d == 1){
-            //check so there still is time (will run all time)
-            x = fnuc(x,c,n);
-            y = fnuc(fnuc(y,c,n), c, n);
-            temp = x-y;
-            gcd(d,n,temp); //d is return
-            i++;
-            if(i > pollardLimit){
-                return 1;
-            }
-            
-        }
-        if(d != n){
-            //cout << d << endl;
-            return d;
-        }
-    //}
-    return 1;
+/* This pollard rho grants 68 points in kattis */
+mpz_class pollard_rho(mpz_class& n){	
+	mpz_class x = 2; //Should really be random but w/e
+	mpz_class y = 2;
+	mpz_class c = 1;//g++ --std=c++0x main.cpp -lgmpxx -lgmp -o factoring.out
+	mpz_class d = 1;
+	mpz_class temp;
+	int i = 0;
+	while(d == 1){
+		x = fnuc(x,c,n);
+		y = fnuc(fnuc(y,c,n), c, n);
+		temp = x-y;
+		gcd(d,n,temp);
+		i++;
+		if(i > pollardLimit){
+			return 1;
+		}
+		
+	}
+	if(d != n){
+		return d;
+	}
+	return 1;
 }
 
+/* Attempt factor with trial division of 500 primes. VERY SLOW */
 mpz_class bigPrimeFactorer(mpz_class& n){
     mpz_class tmp(211);
     for(int j = 0 ; j < 500 ; ++j){
-        if( n % tmp == 0 ){
-            return tmp;
-        }
+		if( n % tmp == 0 ){
+			return tmp;
+		}
            mpz_nextprime(tmp.get_mpz_t(),tmp.get_mpz_t());
-    }
-    return 1;   
+	}
+	return 1;	
 }
 
-void ApowK(mpz_class& n, mpz_class& x){
-    if(isPrime(x)){
-        //cout << "APOWK!" << endl;
-        while( n % x == 0 ){
-            //cout << "Another ones goes..." << endl;
-            factors.push_back(x);
-            n = n / x;
-        }
-    }
-    //cout << "left: " << n << endl;
-}
-
-bool testbit(mpz_class a, unsigned long int i) {
-    return (i == mpz_scan1(a.get_mpz_t(), i))? 1 : 0; 
-}
-
-
-mpz_class william(mpz_class& n){
-
-    mpz_class d, count, vs, vb,tempvar,p;
-    int cc, i, k;
-    double bp;
-
-    unsigned int m = mpz_sizeinbase(n.get_mpz_t(),2); //random
-
-    if(m > 88){
-        return 1;
-    }
-
-
-    cc = 10;
-    count = 0;
-    p = 4;
-
-    for(int index = 0; index < numBrents; ++index){
-        if(time(NULL) > endTime){
-        //if(totalBrents < 0){
-            return 1;
-        }
-        //cout << "Outer" << endl;
-        tempvar = p - 2;
-        gcd(d,tempvar,n);
-        if(1 < d && d < n){
-            if(isPrime(d)){
-                return d;
-            }
-            else{
-                william(d);
-            }
-        }
-        for(i = 1; i <= cc; i++){
-            //cout << "Inner" << endl;
-            count++;
-            vs = p;
-            vb = (p*p - 2)%n;
-            //bp =  log2(count);
-            //bp = logn(count, 2);
-            bp = mpz_sizeinbase(count.get_mpz_t(),2);
-            for(k = bp; k > -1; k--){
-                if(testbit(count,k)){
-                    vs = (vs*vb - p)%n;
-                    vb = (vb * vb -2)%n;
+/* Gains a list of every prime up to 200000. */
+void sieveOfEratosthenes(){
+        vector<bool> tmp;
+        tmp.reserve(200000);
+        
+        /*for(unsigned int i = 0 ; i < 200000 ; ++i){ //This is to make sure the vector only contains true. However, this does not seem to be a problem.
+                tmp.push_back(true);
+        }*/
+        for(unsigned int i = 2 ; i < 448 ; ++i){ // 448 ~ sqrt(200000)
+                if(tmp[i]){
+                        for(int j = i*i; j < 200000; j += i){ // i^2 + (iter*i)
+                                tmp[j] = false;
+                        }
                 }
-                else{
-                    vb = (vs * vb - p)%n;
-                    vs = (vs *vs -2)%n;
-                }
-            }
-            p = vs;
         }
-    }
-
-    return 1;
-
+        vector<mpz_class> ret;
+        for(unsigned int i = 2 ; i < 200000 ; ++i){
+                if(tmp[i]){
+                        ret.push_back((mpz_class)i);
+                }
+        }
+        primes = ret;
 }
 
+/* grant a log base q even though numbers are represented in base 2 */
+void logq(mpz_class log, const mpz_class q,const mpz_class n){
+        int logn = mpz_sizeinbase(n.get_mpz_t(),2);
+        int logq = mpz_sizeinbase(q.get_mpz_t(),2);
+        log = (logn/logq);
+}
 
+/* Pollard P-1 fatorization method. Used as a second (fast as limited to primes < 200000) method incase brent fails to gain a factor. */
+mpz_class pollard_p1(mpz_class& n){
+        mpz_class c(2);
+        for(int i = 0 ; i < primes.size() ; ++i){
+			mpz_class pp = primes[i];
+			while(pp < 200000){
+				mpz_powm(c.get_mpz_t(),c.get_mpz_t(),primes[i].get_mpz_t(),n.get_mpz_t());
+				pp *= primes[i];
+			}
+		}
+		mpz_class g;
+		c--;
+		gcd(g,c,n);
+		if(g > 1 && g < n){
+			return g;
+		}
+		return 1;
+        
+}
 
+/* Pollard Brent factorization method. Pretty much the same as Pollard's rho though uses brent cycle detection. */
 mpz_class pollard_brent(mpz_class& n){
         mpz_class y; //random
-
         random(y,n);
-        //mpz_class c(1);//c(y); //random
-        //random(c,n);
-        unsigned int m = mpz_sizeinbase(n.get_mpz_t(),2); //random
 
-       if(m > 99){
-        return 1;
-       }
-        //random(m,n);
+        unsigned int m = mpz_sizeinbase(n.get_mpz_t(),2);
+        
+        unsigned int brentLimit = numBrents;
+        if(m > 99){
+    	   brentLimit = brentLimit >> 3;
+	    } else if(m > 98){
+           brentLimit = brentLimit >> 2;
+	    } else if(m > 95){
+           brentLimit = brentLimit >> 1;   
+	    }
+
+
         mpz_class g(1);
         unsigned int r = 1;
         mpz_class q(1);
@@ -188,67 +171,51 @@ mpz_class pollard_brent(mpz_class& n){
          while(g == 1){
                 x = y;
                 for(int i = 0 ; i < r ; ++i){
-                    y = ((y*y)+ONE)%n; //((y*y)%n+c)%n;
+                    y = ((y*y)+ONE)%n;
                 }
                 unsigned int k = 0;
                 while(k < r && g == 1){
-                    //ys = y;
-                //tempvar = r-k;
-                //abs1(tempvar,tempvar);
                     for(int i = 0 ; i < min(m,r-k); ++i){
                         y = ((y*y)+ONE)%n;
                         q = (q*(x-y))%n;
                     }
-                    gcd(g, q, n);
-                    k = k + m;
-                    if(k > numBrents){
-                        //total Brents -= k;
-                        return 1;
-                    }
-                }
+					gcd(g, q, n);
+					k = k + m;
+					if(k > brentLimit){
+						return pollard_p1(n); //could call for pollard rho, pollard p-1, bigPrimeFactorer etc though this will require more time.
+					}
+				}
                 r = r << 1;
             }
-            /*if(g == n){
-             int i = 0;
-                while(true){
-                    ys = ((ys*ys)+ONE)%n;
-                    tempvar = x - ys;
-                    //abs1(temp, tempvar);
-                    gcd(g, tempvar ,n);
-                i++;
-                    if(g > 1 || i >= pollardLimit){
-                        break;
-                    }
-                }
-            }*/
-
         if(g != n){
             return g;
         }
         
-       //return bigPrimeFactorer(g);
-       return 1;
+	   return pollard_p1(n); //could call for pollard rho, pollard p-1, bigPrimeFactorer etc though this will require more time.
 
 }
 
 
-
+/* trial division of small factors */
 bool smallPrimeFactorer(mpz_class& n){
-    for(int j = 0 ; j < smallPrimes.size() ; ++j){
-        if( n % smallPrimes[j] == 0 ){
-            factors.push_back(smallPrimes[j]);
-            n = n/smallPrimes[j];
-            --j;
-        }
-    }
-    if(n == 1){
-        return false;
-    } else {
-        return true;
-    }
+	for(int j = 0 ; j < smallPrimes.size() ; ++j){
+		if( n % smallPrimes[j] == 0 ){
+			factors.push_back(smallPrimes[j]);
+			n = n/smallPrimes[j];
+			--j;
+		}
+	}
+	//Do we need to continue factor?
+	if(n == 1){
+		return false;
+	} else {
+		return true;
+	}
 }
 
 void factor(mpz_class& n){
+	
+	//is n prime? then we're done.
     if(isPrime(n)){
         factors.push_back(n);
     }
@@ -257,23 +224,23 @@ void factor(mpz_class& n){
         mpz_class n1;
         mpz_class n2;
 
-        //n1 = pollard_brent(n);
-        //n1 = pollard_rho(n);
-        n1 = william(n);
+        n1 = pollard_brent(n);
+        //n1 = pollard_p12(n);
+        
+        //Still time to continue or should we abbandon results?
         if(time(NULL) > endTime){
-        //if(totalBrents < 0){
             n1 = 1;
         }
-        if(n1 == 1){
+        if(n1 == 1){ //unable to factor in time
             cout << "fail" << endl;
             factors.clear();
-        } else {
+            
+        } else { //continue factor problem
             n2 = n / n1;
             factor(n1);
-            ApowK(n2,n1);
-        if(factors.size() != 0 && n2 != 1){
-            factor(n2);
-        }
+		if(factors.size() != 0 && n2 != 1){ //in case of failure
+		    factor(n2);
+		}
         }
 
     }
@@ -284,7 +251,7 @@ int main()
 {
     unsigned long int seed;
 
-    seed = time(NULL);//time perhaps?
+    seed = time(NULL);
 
     gmp_randinit_default(r_state);
     gmp_randseed_ui(r_state, seed);
@@ -319,23 +286,8 @@ int main()
     smallPrimes.push_back(109);
     smallPrimes.push_back(113);
     smallPrimes.push_back(127);
-    smallPrimes.push_back(131); //30
-    /*smallPrimes.push_back(137);
-    smallPrimes.push_back(139);
-    smallPrimes.push_back(149);
-    smallPrimes.push_back(151);
-    smallPrimes.push_back(157);
-    smallPrimes.push_back(163);
-    smallPrimes.push_back(167);
-    smallPrimes.push_back(173);
-    smallPrimes.push_back(179);
-    smallPrimes.push_back(181); //40
-    smallPrimes.push_back(191);
-    smallPrimes.push_back(193);
-    smallPrimes.push_back(197);
-    smallPrimes.push_back(199);*/
 
-
+	sieveOfEratosthenes();
     factors.reserve(30);
     mpz_class test;
     startTime = time(NULL);
@@ -343,24 +295,19 @@ int main()
 
     for(int i = 0 ; i < 100 ; ++i){
         if(time(NULL) < endTime){
-            //cout << totalBrents << " " << 0 << endl;
-        //if(totalBrents > 0){
             cin >> test;
             if(smallPrimeFactorer(test)){
-                factor(test);
-            }
+				factor(test);
+			}
             for(int i = 0; i < factors.size() ; ++i){
                 cout << factors[i] << endl;
             }
         } else {
             cout << "fail" <<endl;
         }
-    factors.clear();
+	factors.clear();
         cout << endl;
     }
 
     return 0;
 }
-
-
-
