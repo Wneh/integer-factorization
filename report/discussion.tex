@@ -1,0 +1,23 @@
+Before we actually sat down and started to program we did research on the algorithms and deciding which ones we we’re going to implement. We agreed on starting with the basic Pollard rho and thereafter continue improving it by rewriting it to Pollard Brent.
+
+During our research we clearly understood that the algorithm that gave the best result was the quadratic sieve. We tried to find any good paper on how to implement the algorithm but we found mostly mathematical papers with fuzzy instructions. Hence we decided not to try to implement in and rather try to implement a good Pollard Brend and try to optimize it instead.
+
+\subsection{Implementation details}
+
+\subsubsection{Trial division}
+
+Trial division were used in both Pollard’s rho and Pollard Brent algorithms for optimization purpose. From the beginning we made a list of small prime numbers to try out before running other algorithms. We decided that the twenty to forty first prime numbers would be enough to ensure that the majority of non-prime $N$’s should get at least one factor from this without making it too costly.
+
+\subsubsection{Pollard’s rho}
+
+For Pollard’s rho we implemented it directly from its pseudo code and it work straight away. We did try alter parameters such as constants, skipping the larger numbers and setting a limit for the iteration to make sure we do not spend too much time on a specific number. No other optimizations were done. 
+
+\subsubsection{Pollard Brent}
+
+Pollard Brent is where most our work was done. It was also the first algorithm to be implemented as it were not too hard to write and were supposively superior to Pollard’s rho. However we did have several setbacks with it.
+
+On the first implementation we felt that it were not working very well. At least our institution were that something must be wrong. We did not follow the algorithm exactly at this point but followed some strange posts from the internet about how to make it more efficient such as using primes for constants and change these after a few iterations. It proved to be incorrect thus making us move on to a second version.
+
+The second implementation was more closely based on what Pollard Brent really is. Removing the so called “optimizations” we read about such as using primes for constants and changing these over time. Instead we set them to one and also reduced the number of checks of how long time the program has been running. This in all did not grant much of a performance increase but changing the value $m$ (used to count iterations before GCD) to the numbers bit length resulted in a much greater performance increase. At this time we also had a strange idea about changing the initial random value.
+
+Using the fact that any non prime number should have a factor that is less than or equal to its square root we decided to try out changing the random from giving a number up to $N$ to a number up to $\sqrt{N}$ for our starting-point in hope that we would end up finding this factor faster. This also granted us a quite big performance increase though we were unsure about if it really does work.
