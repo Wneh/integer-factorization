@@ -77,9 +77,9 @@ As two pointers move at different speeds, one will move much further ahead than 
 	\If{$N$ mod $2 = 0$}
 	 	\State \Return $2$
 	\EndIf
-	\State $x = random()$
-	\State $c = random()$
-	\State $y = c$
+	\State $x = 2$
+	\State $c = 1$
+	\State $y = x$
 	\State $g = 1$
 	\While{$g = 1$} 
 		\State $x = f(x)$
@@ -87,9 +87,9 @@ As two pointers move at different speeds, one will move much further ahead than 
 		\State $g = gcd(x-y,N)$
 	\EndWhile
 	\If {$g = N$}
-		\State \Return $error$
+		\State \Return $fail$
 	\EndIf
-	\State \Return $g$
+	\State \Return $g$	
 \EndFunction
 \Function{f}{$N$}
 	\State \Return $(N*N + c) \% N$
@@ -99,11 +99,56 @@ As two pointers move at different speeds, one will move much further ahead than 
 
 \subsubsection{Pollard Brent}
 
-The basic structure of the algorithm is the same in the Pollard's rho algorithm with the exception of using Brent's cycle finding algorithm instead of Floyd's. 
+The basic structure of the algorithm is the same in the Pollard's rho algorithm with the exception of using Brent's cycle finding algorithm instead of Floyd's.
 
 \paragraph{Brent's cycle finding algorithm\\}
 
-TODO
+Brent’s cycle finding algorithm is uses the same structure as Floyd’s algorithm with two pointers that that move is different speed. The difference in Brent’s compared against Floyd’s is the fast moving pointer speed is increasing with the power of two.
+
+\paragraph{Pseudocode:}
+
+\textcolor{white}{ }
+
+\begin{algorithm}[H]
+\caption{Pollard Brent}
+\begin{algorithmic}
+\Function {pollard\_brent}{$N$}
+	\If{$N$ mod $2 = 0$}
+	 	\State \Return $2$
+	\EndIf
+	\State $y = random(N-1)$
+	\State $c = random(N-1)$
+	\State $m = random(N-1)$
+	\State $g = 1$
+	\State $r = 1$
+	\State $q = 1$
+	\While{$g = 1$} 
+		\State $x = y$
+		\ForAll {$i$ in $0 \rightarrow r$}
+			\State $y = ((y*y)\%N+c)\%N$
+		\EndFor
+		\State $k = 0$
+		\While{$k < r $ AND $g = 1$}
+			\State $ys = y$
+			\ForAll{$i$ in $0 \rightarrow min(m,r-k)$}
+				\State $y = ((y*y)\%N+c)\%N$
+				\State $q = q * (|x-y|)\%N$
+			\EndFor
+			\State $g = gcd(q,N)$
+			\State $k = k + m$
+		\EndWhile
+		\State $r = r * 2$ 
+	\EndWhile
+	\If {$g = N$}
+		\State \Return $fail$
+	\EndIf
+	\State \Return $g$	
+\EndFunction
+\Function{f}{$N$}
+	\State \Return $(N*N + c) \% N$
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Miller-Rabin primary test}
 
