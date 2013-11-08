@@ -101,7 +101,7 @@ As two pointers move at different speeds, one will move much further ahead than 
 
 The basic structure of the algorithm is the same in the Pollard's rho algorithm with the exception of using Brent's cycle finding algorithm instead of Floyd's.
 
-\paragraph{Brent's cycle finding algorithm\\}
+\paragraph{Brent's cycle finding}
 
 Brent’s cycle finding algorithm is uses the same structure as Floyd’s algorithm with two pointers that that move is different speed. The difference in Brent’s compared against Floyd’s is the fast moving pointer speed is increasing with the power of two.
 
@@ -163,7 +163,7 @@ Using this idea Pollard’s P-1 try to find the GCD between a coprime constant a
 	\State $c = 2$
 	\ForAll{$prime$ in list of $primes$}
 		\State$p = prime$
-		\While{$p < $ last prime in list of primes}
+		\While{$p < $ last $prime$ in list of $primes$}
 			\State $c = c^{prime}\%N$
 			\State $p = p * prime$
 		\EndWhile
