@@ -103,7 +103,8 @@ The basic structure of the algorithm is the same in the Pollard's rho algorithm 
 
 \paragraph{Brent's cycle finding}
 
-Brent’s cycle finding algorithm is uses the same structure as Floyd’s algorithm with two pointers that that move is different speed. The difference in Brent’s compared against Floyd’s is the fast moving pointer speed is increasing with the power of two.
+Brent’s cycle finding algorithm is uses the same structure as Floyd’s algorithm with two pointers that that move is different speed. The difference of Brent’s compared against Floyd’s is that the fast moving pointer’s speed is increasing with the power of two and the slow one does not move at all. Instead this slow pointer teleports to the location of the fast one after each iteration.
+Brent’s research found this algorithm to be $24\%$ faster than Floyd’s~\cite{brent}.
 
 \paragraph{Pseudocode:}
 
@@ -193,7 +194,7 @@ We considered to implement the quadratic sieve but due to the hardness of the im
 
 \subsubsection{Fermat factorization}
 
-The key concept of fermat factorization is that prime can be written in the form $N = x^2 - y^2$ which itself can be rewritten into $N = (x+y)(x-y)$. Thus search for an x that satisfy $x^2 - N = y^2$ equation. Then a non trivial prime factor is found.   
+The key concept of fermat factorization is that prime can be written in the form $N = x^2 - y^2$ which itself can be rewritten into $N = (x+y)(x-y)$. Thus search for an x that satisfy $x^2 - N = y^2$ equation. Then a non trivial prime factor is found~\cite{fermat}.   
 
 After reading up on the algorithm and its performance we decided not to put time on implement it.
 
