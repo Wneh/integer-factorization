@@ -4,6 +4,8 @@ During our research we clearly understood that the algorithm that gave the best 
 
 At the end we noticed that the algorithms gave good result on different type on N. Thus for the final version we combined all the algorithms we had implemented and spend a great deal of time to find breaking points for each algorithm though it resulted in an even better score.
 
+In the beginning of the project we planned on having charts on how well the algorithms performed with different iteration numbers. Thus during the project we noticed that the result for the same number of iterations could vary quite much. Therefore we decided not compare the result depending on the number of iterations.
+
 \subsection{Implementation details}
 
 \subsubsection{Trial division}
@@ -23,3 +25,8 @@ On the first implementation we felt that it were not working very well. At least
 The second implementation was more closely based on what Pollard Brent really is. Removing the so called “optimizations” we read about such as using primes for constants and changing these over time. Instead we set them to one and also reduced the number of checks of how long time the program has been running. This in all did not grant much of a performance increase but changing the value $m$ (used to count iterations before GCD) to the numbers bit length resulted in a much greater performance increase. At this time we also had a strange idea about changing the initial random value.
 
 Using the fact that any non prime number should have a factor that is less than or equal to its square root we decided to try out changing the random from giving a number up to $N$ to a number up to $\sqrt{N}$ for our starting-point in hope that we would end up finding this factor faster. This also granted us a quite big performance increase though we were unsure about if it really does work.
+
+\subsubsection{Pollard’s P-1}
+
+We never expected to implement Pollard’s P-1 but near the end of the project we felt that it would be nice to try it. Especially as we had worked quite a lot on John Pollard’s algorithms it would be nice to add one more of his.
+The implementation of Pollard’s P-1 was very smooth and the only problem we had was that the wikipedia page stated we needed a logarithm function of base q where q is a prime. After reading more we noticed that it is enough to use a prime instead of this logarithm and it begun working. Still it were not performing as good as Pollard’s rho or Pollard Brent but was very fast to find a factor from time to time. This made us go with the idea of combining it with the previous Pollard Brent incase it did not produce an answer in time. At the same time we made Pollard’s rho run incase Pollard’s P-1 failed to grant some extra chances of finding a solution.
