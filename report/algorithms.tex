@@ -35,17 +35,17 @@ A simple optimization of trial division is to never check primes greater than th
 \end{algorithm}
 
 
-\subsubsection{Pollard’s rho}
+\subsubsection{Pollard's rho}
 
-Pollard’s rho is a factorization algorithm invented by John Pollard~\cite{pollard} It is also known as Pollard’s Monte Carlo factorization algorithm due to it random properties and does not always manage to return a result. However, when it does return a result it always return a correct one.
-The main idea of Pollard’s rho is that if you pick a random number \(x\), then pick another random number y where both are between zero and N, you can check whether \((x-y)\) and \(N\) has a GCD which is not equal to one. If it does it is all fine but if it does not, you would have to find another random number \(z\) and check whether \((z-x)\) or \((z-y)\) has a GCD with \(N\) that is not equal to one. If it still does not grant a GCD which is not equal to one you will have to keep introducing random numbers and check if they work.
-As GCD is a very expensive operation picking numbers completely random may not be profitable. Therefore a typical choice for picking the numbers is using the formula \(x^2 + a\) where \(a\) is a constant. This a can be chosen at will and certain \(a\)’s are better than others for specific \(N\)’s.
-Important to notice is that \(N\) can obviously not have any factors greater than itself thus the algorithm should be run in modulo \(N\) number space to repeat the process incase we reach numbers greater than \(N\). 
-The algorithm will appear as cycling to the answers and whenever a cycle has been detected the algorithm will have found a solution. Note that a solution can in some cases include \(N\) even if \(N\) is not a prime. This is a result that the algorithm failed to find a factor. Pollard’s rho uses Floyd’s cycle finding algorithm to discover these cycles.
+Pollard's rho is a factorization algorithm invented by John Pollard~\cite{pollard} It is also known as Pollard's Monte Carlo factorization algorithm due to it random properties and does not always manage to return a result. However, when it does return a result it always return a correct one.
+The main idea of Pollard's rho is that if you pick a random number \(x\), then pick another random number y where both are between zero and N, you can check whether \((x-y)\) and \(N\) has a GCD which is not equal to one. If it does it is all fine but if it does not, you would have to find another random number \(z\) and check whether \((z-x)\) or \((z-y)\) has a GCD with \(N\) that is not equal to one. If it still does not grant a GCD which is not equal to one you will have to keep introducing random numbers and check if they work.
+As GCD is a very expensive operation picking numbers completely random may not be profitable. Therefore a typical choice for picking the numbers is using the formula \(x^2 + a\) where \(a\) is a constant. This a can be chosen at will and certain \(a\)'s are better than others for specific \(N\)'s.
+Important to notice is that \(N\) can obviously not have any factors greater than itself thus the algorithm should be run in modulo \(N\) number space to repeat the process in case we reach numbers greater than \(N\). 
+The algorithm will appear as cycling to the answers and whenever a cycle has been detected the algorithm will have found a solution. Note that a solution can in some cases include \(N\) even if \(N\) is not a prime. This is a result that the algorithm failed to find a factor. Pollard's rho uses Floyd's cycle finding algorithm to discover these cycles.
 
-\paragraph{Floyd’s cycle finding algorithm}
+\paragraph{Floyd's cycle finding algorithm}
 
-Floyd’s cycle finding algorithm is used to find cycles of calls in a program in order to prevent the program from running infinitely. Consider a small program that make a sequence of function calls such as this one
+Floyd's cycle finding algorithm is used to find cycles of calls in a program in order to prevent the program from running infinitely. Consider a small program that make a sequence of function calls such as this one
 
 \begin{algorithm}
 %\caption{Trial division}
@@ -103,8 +103,8 @@ The basic structure of the algorithm is the same in the Pollard's rho algorithm 
 
 \paragraph{Brent's cycle finding}
 
-Brent’s cycle finding algorithm uses the same structure as Floyd’s algorithm with two pointers that that move is different speed. The difference of Brent’s compared against Floyd’s is that the fast moving pointer speed is increasing with the power of two and the slow one does not move at all. Instead the slow pointer teleports to the location of the fast one after each iteration.
-Brent’s research found this algorithm to be $24\%$ faster than Floyd’s~\cite{brent}.
+Brent's cycle finding algorithm uses the same structure as Floyd's algorithm with two pointers that that move is different speed. The difference of Brent's compared against Floyd's is that the fast moving pointer speed is increasing with the power of two and the slow one does not move at all. Instead the slow pointer teleports to the location of the fast one after each iteration.
+Brent's research found this algorithm to be $24\%$ faster than Floyd's~\cite{brent}.
 
 \paragraph{Pseudocode:}
 
@@ -148,10 +148,10 @@ Brent’s research found this algorithm to be $24\%$ faster than Floyd’s~\cite
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Pollard’s P-1}
+\subsubsection{Pollard's P-1}
 
-Pollard’s P-1 uses Fermat’s little theorem to find factors. Fermat’s little theorem state that if $i^p = i$ mod $p$ where $p$ is a prime number, $p$ is a factor of $i$. While this is slightly inconvenient for finding factors this theorem can be divided by $i$ to create a more useful version. If $i^{(p-1)} = 1$ mod $p$, then $i^{(p-1)} - 1$ is a factor of $i$.
-Using this idea Pollard’s P-1 try to find the GCD between a coprime constant and a prime from a pre calculated set of primes within the modulo number space of $N$ in hope to find a factor.
+Pollard's P-1 uses Fermat's little theorem to find factors. Fermat's little theorem state that if $i^p = i$ mod $p$ where $p$ is a prime number, $p$ is a factor of $i$. While this is slightly inconvenient for finding factors this theorem can be divided by $i$ to create a more useful version. If $i^{(p-1)} = 1$ mod $p$, then $i^{(p-1)} - 1$ is a factor of $i$.
+Using this idea Pollard's P-1 try to find the GCD between a coprime constant and a prime from a pre calculated set of primes within the modulo number space of $N$ in hope to find a factor.
 
 \paragraph{Pseudocode:}
 
@@ -184,7 +184,7 @@ Using this idea Pollard’s P-1 try to find the GCD between a coprime constant a
 Miller-Rabin primary test is a monte carlo algorithm with the time complexity of $\mathcal{O}(k*log(n)^2)$. The
 probability for the primary test is $2^{-k}$ where k is the number of iterations.
 
-Since we used the primary test in gmp that uses Miller-Rabin primary test(after trial-division) we won’t present any pseudocode for this algorithm.
+Since we used the primary test in gmp that uses Miller-Rabin primary test(after trial-division) we won't present any pseudocode for this algorithm.
 
 \subsection{Considered}
 
@@ -194,7 +194,7 @@ We considered to implement the quadratic sieve but due to the hardness of the im
 
 \subsubsection{Fermat factorization}
 
-The key concept of fermat factorization is that prime can be written in the form $N = x^2 - y^2$ which itself can be rewritten into $N = (x+y)(x-y)$. Thus search for an $x$ that satisfy $x^2 - N = y^2$ equation. Then a non trivial prime factor is found~\cite{fermat}.   
+The key concept of Fermat factorization is that prime can be written in the form $N = x^2 - y^2$ which itself can be rewritten into $N = (x+y)(x-y)$. Thus search for an $x$ that satisfy $x^2 - N = y^2$ equation. Then a non trivial prime factor is found~\cite{fermat}.   
 
 After reading up on the algorithm and its performance we decided not to put time on implement it.
 
