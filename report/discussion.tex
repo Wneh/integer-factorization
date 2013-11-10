@@ -10,11 +10,11 @@ In the beginning of the project we planned on having charts on how well the algo
 
 \subsubsection{Trial division}
 
-Trial division were used in both Pollard's rho and Pollard Brent algorithms for optimization purpose. From the beginning we made a list of small prime numbers to try out before running other algorithms. We decided that the twenty to forty first prime numbers would be enough to ensure that the majority of non-prime $N$'s should get at least one factor from this without making it too costly.
+Trial division were used in all other algorithms for optimization purpose. From the beginning we made a list of small prime numbers to try out before running other algorithms. We decided that the twenty to forty first prime numbers would be enough to ensure that the majority of non-prime $N$'s should get at least one factor from this without making it too costly.
 
 \subsubsection{Pollard's rho}
 
-For Pollard's rho we implemented it directly from its pseudo code and it work straight away. We did try alter parameters such as constants, skipping the larger numbers and setting a limit for the iteration to make sure we do not spend too much time on a specific number. No other optimizations were done. 
+For Pollard's rho we implemented it directly from its pseudo code and it worked straight away. We did try alter parameters such as constants, skipping the larger numbers and setting a limit for the iteration to make sure we do not spend too much time on a specific number. No other optimizations were done. 
 
 \subsubsection{Pollard Brent}
 
