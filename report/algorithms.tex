@@ -2,7 +2,7 @@
 
 \subsubsection{Trial division}
 
-Trial division is one of the most inefficient algorithms for factorization of large integers. It is however one of the most efficient algorithms for factoring small integers and it also the easiest algorithm to perceive.
+Trial division is one of the most inefficient algorithms for factorization of large integers. It is however one of the most efficient algorithms for factoring small integers and it is also the easiest algorithm to perceive.
 The trial division algorithm only have a few steps. It begins with finding a set of prime-numbers using some algorithm such as the sieve of eratosthenes then iteratively check if \(N\) divided by any of these primes grants no remainder. If it does not grant any remainder the prime used in the division is a factor. The algorithm will continue checking this until \(N\) becomes one.
 A simple optimization of trial division is to never check primes greater than the square root of \(N\). Considering that if \(N = a * b\) and if a is greater than \(\sqrt{N}\) then \(b\) must be smaller than \(\sqrt{N}\). So for every factor greater than \(\sqrt{N}\) there has to be one factor smaller than \(\sqrt{N}\) thus if we check for factors up to \(\sqrt{N}\) we will find a factor unless \(N\) is already prime.
 
@@ -37,11 +37,11 @@ A simple optimization of trial division is to never check primes greater than th
 
 \subsubsection{Pollard's rho}
 
-Pollard's rho is a factorization algorithm invented by John Pollard~\cite{pollard} It is also known as Pollard's Monte Carlo factorization algorithm due to it random properties and does not always manage to return a result. However, when it does return a result it always return a correct one.
-The main idea of Pollard's rho is that if you pick a random number \(x\), then pick another random number y where both are between zero and N, you can check whether \((x-y)\) and \(N\) has a GCD which is not equal to one. If it does it is all fine but if it does not, you would have to find another random number \(z\) and check whether \((z-x)\) or \((z-y)\) has a GCD with \(N\) that is not equal to one. If it still does not grant a GCD which is not equal to one you will have to keep introducing random numbers and check if they work.
+Pollard's rho is a factorization algorithm invented by John Pollard~\cite{pollard}. It is also known as Pollard's Monte Carlo factorization algorithm due to it random properties and does not always manage to return a result. However, when it does return a result it always return a correct one. \\
+The main idea of Pollard's rho is that if you pick a random number \(x\), then pick another random number y where both are between zero and N, you can check whether \((x-y)\) and \(N\) has a GCD which is not equal to one. If it does it is all fine but if it does not, you would have to find another random number \(z\) and check whether \((z-x)\) or \((z-y)\) has a GCD with \(N\) that is not equal to one. If it still does not grant a GCD which is not equal to one you will have to keep introducing random numbers and check if they work. \\
 As GCD is a very expensive operation picking numbers completely random may not be profitable. Therefore a typical choice for picking the numbers is using the formula \(x^2 + a\) where \(a\) is a constant. This a can be chosen at will and certain \(a\)'s are better than others for specific \(N\)'s.
-Important to notice is that \(N\) can obviously not have any factors greater than itself thus the algorithm should be run in modulo \(N\) number space to repeat the process in case we reach numbers greater than \(N\). 
-The algorithm will appear as cycling to the answers and whenever a cycle has been detected the algorithm will have found a solution. Note that a solution can in some cases include \(N\) even if \(N\) is not a prime. This is a result that the algorithm failed to find a factor. Pollard's rho uses Floyd's cycle finding algorithm to discover these cycles.
+Important to notice is that \(N\) can obviously not have any factors greater than itself thus the algorithm should be run in modulo \(N\) number space to repeat the process in case we reach numbers greater than \(N\). \\
+The algorithm will appear as cycling to the answers and whenever a cycle has been detected the algorithm will have found a solution. Note that a solution can in some cases include \(N\). This is a result that the algorithm failed to find a factor. Pollard's rho uses Floyd's cycle finding algorithm to discover these cycles.
 
 \paragraph{Floyd's cycle finding algorithm}
 
